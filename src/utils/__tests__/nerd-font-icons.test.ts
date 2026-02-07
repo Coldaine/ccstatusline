@@ -6,7 +6,8 @@ import {
 
 import {
     NERD_FONT_ICONS,
-    formatWidgetLabel
+    formatWidgetLabel,
+    getNerdFontIcon
 } from '../nerd-font-icons';
 
 describe('formatWidgetLabel', () => {
@@ -30,7 +31,6 @@ describe('formatWidgetLabel', () => {
     });
 
     it('should return undefined for unknown widget types', () => {
-        const { getNerdFontIcon } = require('../nerd-font-icons');
         expect(getNerdFontIcon('unknown-widget')).toBeUndefined();
     });
 });

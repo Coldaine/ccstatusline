@@ -52,7 +52,7 @@ export class GitWorktreeWidget implements Widget {
         if (worktree)
             return formatWidgetLabel('git-worktree', worktree, '𖠰 ', item.rawValue, settings.nerdFontIcons);
 
-        return hideNoGit ? null : formatWidgetLabel('git-worktree', 'no git', '𖠰 ', false, settings.nerdFontIcons);
+        return hideNoGit ? null : formatWidgetLabel('git-worktree', 'no git', '𖠰 ', item.rawValue, settings.nerdFontIcons);
     }
 
     private getGitWorktree(): string | null {

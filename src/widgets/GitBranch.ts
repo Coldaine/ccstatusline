@@ -53,7 +53,7 @@ export class GitBranchWidget implements Widget {
         if (branch)
             return formatWidgetLabel('git-branch', branch, '⎇ ', item.rawValue, settings.nerdFontIcons);
 
-        return hideNoGit ? null : formatWidgetLabel('git-branch', 'no git', '⎇ ', false, settings.nerdFontIcons);
+        return hideNoGit ? null : formatWidgetLabel('git-branch', 'no git', '⎇ ', item.rawValue, settings.nerdFontIcons);
     }
 
     private getGitBranch(): string | null {
