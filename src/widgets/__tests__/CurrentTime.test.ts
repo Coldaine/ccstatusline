@@ -34,7 +34,7 @@ describe('CurrentTimeWidget', () => {
         };
 
         const result = widget.render(item, context, DEFAULT_SETTINGS);
-        expect(result).toBe(' 01:26 PM');
+        expect(result).toBe(' 1:26 PM');
     });
 
     it('should render actual time in 24hr format', () => {

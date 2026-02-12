@@ -22,7 +22,7 @@ export class CurrentTimeWidget implements Widget {
     render(item: WidgetItem, context: RenderContext, settings: Settings): string | null {
         if (context.isPreview) {
             const format = item.metadata?.format ?? '24hr';
-            const previewTime = format === '12hr' ? '01:26 PM' : '13:26';
+            const previewTime = format === '12hr' ? '1:26 PM' : '13:26';
             return formatWidgetLabel('current-time', previewTime, ' ', item.rawValue, settings.nerdFontIcons);
         }
 

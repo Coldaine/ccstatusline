@@ -222,10 +222,14 @@ const CurrentWorkingDirEditor: React.FC<WidgetEditorProps> = ({ widget, onComple
             if (key.return) {
                 const segments = parseInt(segmentsInput, 10);
                 if (!isNaN(segments) && segments > 0) {
+                    // When setting segments, clear fishStyle and shortMode to avoid conflicts
+                    const { fishStyle, shortMode, ...restMetadata } = widget.metadata ?? {};
+                    void fishStyle;
+                    void shortMode;
                     onComplete({
                         ...widget,
                         metadata: {
-                            ...widget.metadata,
+                            ...restMetadata,
                             segments: segments.toString()
                         }
                     });
