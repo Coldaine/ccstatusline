@@ -26,7 +26,9 @@ export const NERD_FONT_ICONS: Record<string, string> = {
     'version':                     '\uF02B',     //  nf-fa-tag
     'output-style':                '\uF1FC',     //  nf-fa-paint_brush
     'current-working-dir':         '\uF07B',     //  nf-fa-folder
-    'claude-session-id':           '\uF2C1'     //  nf-fa-id_card
+    'claude-session-id':           '\uF2C1',    //  nf-fa-id_card
+    'hostname':                    '\uF108',     //  nf-fa-desktop
+    'current-time':                '\uF017'      //  nf-fa-clock_o
 };
 
 /**

@@ -24,10 +24,13 @@ export class CurrentWorkingDirWidget implements Widget {
     getEditorDisplay(item: WidgetItem): WidgetEditorDisplay {
         const segments = item.metadata?.segments ? parseInt(item.metadata.segments, 10) : undefined;
         const fishStyle = item.metadata?.fishStyle === 'true';
+        const shortMode = item.metadata?.shortMode === 'true';
         const modifiers: string[] = [];
 
         if (fishStyle) {
             modifiers.push('fish-style');
+        } else if (shortMode) {
+            modifiers.push('short');
         } else if (segments && segments > 0) {
             modifiers.push(`segments: ${segments}`);
         }
@@ -43,11 +46,12 @@ export class CurrentWorkingDirWidget implements Widget {
             const currentFishStyle = item.metadata?.fishStyle === 'true';
             const newFishStyle = !currentFishStyle;
 
-            // Toggle fish style and clear segments
+            // Toggle fish style and clear segments and shortMode
             if (newFishStyle) {
-                // When enabling fish-style, clear segments
-                const { segments, ...restMetadata } = item.metadata ?? {};
+                // When enabling fish-style, clear segments and shortMode
+                const { segments, shortMode, ...restMetadata } = item.metadata ?? {};
                 void segments;
+                void shortMode;
                 return {
                     ...item,
                     metadata: {
@@ -67,18 +71,50 @@ export class CurrentWorkingDirWidget implements Widget {
             }
         }
 
+        if (action === 'toggle-short-mode') {
+            const currentShortMode = item.metadata?.shortMode === 'true';
+            const newShortMode = !currentShortMode;
+
+            // Toggle short mode and clear segments and fishStyle
+            if (newShortMode) {
+                // When enabling short mode, clear segments and fishStyle
+                const { segments, fishStyle, ...restMetadata } = item.metadata ?? {};
+                void segments;
+                void fishStyle;
+                return {
+                    ...item,
+                    metadata: {
+                        ...restMetadata,
+                        shortMode: 'true'
+                    }
+                };
+            } else {
+                // When disabling short mode
+                const { shortMode, ...restMetadata } = item.metadata ?? {};
+                void shortMode;
+
+                return {
+                    ...item,
+                    metadata: Object.keys(restMetadata).length > 0 ? restMetadata : undefined
+                };
+            }
+        }
+
         return null;
     }
 
     render(item: WidgetItem, context: RenderContext, settings: Settings): string | null {
         const segments = item.metadata?.segments ? parseInt(item.metadata.segments, 10) : undefined;
         const fishStyle = item.metadata?.fishStyle === 'true';
+        const shortMode = item.metadata?.shortMode === 'true';
 
         if (context.isPreview) {
             let previewPath: string;
 
             if (fishStyle) {
                 previewPath = '~/D/P/my-project';
+            } else if (shortMode) {
+                previewPath = 'my-project';
             } else if (segments && segments > 0) {
                 if (segments === 1) {
                     previewPath = '.../project';
@@ -100,6 +136,11 @@ export class CurrentWorkingDirWidget implements Widget {
 
         if (fishStyle) {
             displayPath = this.abbreviatePath(cwd);
+        } else if (shortMode) {
+            // Show only the leaf directory name
+            const pathParts = cwd.split(/[\\/]+/);
+            const filteredParts = pathParts.filter(part => part !== '');
+            displayPath = filteredParts[filteredParts.length - 1] ?? cwd;
         } else if (segments && segments > 0) {
             // Support both POSIX ('/') and Windows ('\\') separators; preserve original separator in output
             const useBackslash = cwd.includes('\\') && !cwd.includes('/');
@@ -122,7 +163,8 @@ export class CurrentWorkingDirWidget implements Widget {
     getCustomKeybinds(): CustomKeybind[] {
         return [
             { key: 's', label: '(s)egments', action: 'edit-segments' },
-            { key: 'f', label: '(f)ish style', action: 'toggle-fish-style' }
+            { key: 'f', label: '(f)ish style', action: 'toggle-fish-style' },
+            { key: 'h', label: 's(h)ort mode', action: 'toggle-short-mode' }
         ];
     }
 
@@ -180,10 +222,14 @@ const CurrentWorkingDirEditor: React.FC<WidgetEditorProps> = ({ widget, onComple
             if (key.return) {
                 const segments = parseInt(segmentsInput, 10);
                 if (!isNaN(segments) && segments > 0) {
+                    // When setting segments, clear fishStyle and shortMode to avoid conflicts
+                    const { fishStyle, shortMode, ...restMetadata } = widget.metadata ?? {};
+                    void fishStyle;
+                    void shortMode;
                     onComplete({
                         ...widget,
                         metadata: {
-                            ...widget.metadata,
+                            ...restMetadata,
                             segments: segments.toString()
                         }
                     });

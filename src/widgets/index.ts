@@ -19,3 +19,5 @@ export { CustomCommandWidget } from './CustomCommand';
 export { BlockTimerWidget } from './BlockTimer';
 export { CurrentWorkingDirWidget } from './CurrentWorkingDir';
 export { ClaudeSessionIdWidget } from './ClaudeSessionId';
+export { HostnameWidget } from './Hostname';
+export { CurrentTimeWidget } from './CurrentTime';
