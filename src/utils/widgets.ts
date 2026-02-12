@@ -27,7 +27,9 @@ const widgetRegistry = new Map<WidgetItemType, Widget>([
     ['version', new widgets.VersionWidget()],
     ['custom-text', new widgets.CustomTextWidget()],
     ['custom-command', new widgets.CustomCommandWidget()],
-    ['claude-session-id', new widgets.ClaudeSessionIdWidget()]
+    ['claude-session-id', new widgets.ClaudeSessionIdWidget()],
+    ['hostname', new widgets.HostnameWidget()],
+    ['current-time', new widgets.CurrentTimeWidget()]
 ]);
 
 export function getWidget(type: WidgetItemType): Widget | null {
